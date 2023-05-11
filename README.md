@@ -1,6 +1,6 @@
 # Elastic-py3
 
-## dowmload
+## Dowmload
 ```bash
 git clone https://github.com/hdb106/Elastic-py3.git
 ```
