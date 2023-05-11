@@ -1,5 +1,10 @@
 # Elastic-py3
 
+## dowmload
+```bash
+git clone https://github.com/hdb106/Elastic-py3.git
+```
+
 ## Unzip
 ```bash
 tar -zxvf ElaStic.tar.gz
