@@ -1,0 +1,185 @@
+ ABOUT
+=========
+
+This is the source distribution of SGROUP.
+The SGROUP deals with symmetry aspects of crystallography, namely for an
+arbitrary choise of the unit cell the SGROUP should find a proper unit cell
+and identify the space group.
+All the 230 space groups were taken from the INTERNATIONAL TABLES FOR
+CRYSTALLOGRAPHY, 1992.
+
+
+ DESCRIPTION
+=============
+     sgroup [options] input_file [output_file]
+
+  OPTIONS:
+     -noeq  Output contains only atoms not connected by lattice translations,
+            i.e. only atoms of a primitive cell. For example, in the case 
+	    of pure fcc lattice only (0,0,0) position will be printed, 
+	    but not the positions (0.5, 0.5, 0.0), (0.5, 0.0, 0.5),
+	    (0.0, 0.5, 0.5).
+	    
+     -prim  Use the basis of the primitive cell for output.
+     
+     -wien  Read data from a file written to be input for the WIEN package.
+            That's WIEN's case.struct file.
+	    
+     -help  Print this message and exit.
+
+
+ NOTES
+========= 
+
+
+1. For all cubic, tetragonal and orthorombic groups, if any,
+   only the "origin choise 2" is implemented (inversion at the origin).
+
+
+2. For monoclinic lattice only "unique axis c" and "origin choise 1"
+   are implemented.
+
+
+3. To make input more convenient various choises of centring modes
+   for lattices have been introduced. It supposes that only atoms of primitive
+   cell and parameters of the conventional cell (see below) must be given.
+   The atom positions must be given with respect to the basis of the
+   conventional cell.
+   ^^^^^^^^^^^^
+   Possible centring modes are:
+     P - primitive. |a|,|b|,|c|, alpha, beta, gamma can take any values.
+     F - all face centred.
+     I - body centred.
+     C - one face centred ( centring translation vector = (a/2, b/2, 0) )
+     A - one face centred ( centring translation vector = (0, b/2, c/2) )
+
+     F,I,C  types only for cubic, tetragonal and orthorombic lattices,
+            in these cases the angles alpha=beta=gamma=PI/2.
+	    
+     A      type for cubic, tetragonal, orthorombic and monoclinic lattices
+            in this case the angles alpha=beta=PI/2, gamma= not fixed.
+	    
+    The vectors of the conventional cell in cartesian basis
+    ( 1 vector is 1 column ... )
+    
+             1    2    3
+             |    |    |
+	     V    V    V
+	     
+             a    0    0
+             0    b    0     F,I,C - centred
+             0    0    c
+
+             a  b*Cos[gamma]  0
+             0  b*Sin[gamma]  0   A - centred
+             0      0         c
+
+    
+    The decompositions of the vectors of the primitive cells over the vectors
+    of the conventional cell ( 1 vector is 1 column ... )
+    
+             1    2    3
+             |    |    |
+	     V    V    V
+	     
+            0.0  0.5  0.5
+            0.5  0.0  0.5     F - centred
+            0.5  0.5  0.0
+    
+           -0.5  0.5  0.5
+            0.5 -0.5  0.5     I - centred
+            0.5  0.5 -0.5      
+    
+             0.5  0.5  0.0   
+            -0.5  0.5  0.0     C - centred
+             0.0  0.0  1.0
+
+            1.0   0.0  0.0
+            0.0   0.5 -0.5     A - centred
+            0.0   0.5  0.5
+
+  Example: C -centred.  
+  a',b',c' = primitive basis
+  a ,b, c  = conventional basis
+                a'=1/2*a - 1/2*b
+                b'=1/2*a + 1/2*b
+                c'=c
+
+4. Output is restricted by the following types of lattices:
+   primitive    - cubic, tetragonal, orthorombic, monoclinic, triclinic
+   F  centred   - cubic, orthorombic
+   I  centred   - cubic, tetragonal, orthorombic
+   rhombohedral - default output supposes the hexagonal obverse setting,
+                  the -prim option will change output to the rhombohedral basis.
+   hexagonal    - hexagonal and trigonal
+   C  centred   - orthorombic
+   A  centred   - orthorombic, monoclinic
+
+
+5. Internal program parameters are stored in the file type_sg.h 
+       MAX_ATOMS=1024  -  maximal number of atoms
+       MAX_CHARS=32    -  maximal number of characters in atom name
+       TOL=1.e-4       -  tolerance for floating arithmetic
+
+
+6. Example of the input file:
+Real structures are stored in the directory ./examples.
+Below just a skeleton.
+
+/ ------------------------------------------------------------
+/ symbol "/" means comment
+
+P  /type of lattice; choices are P,F,I,C,A
+
+/  parameters of cell:
+/  lengths of the basis vectors and 
+/  angles (degree unit is used)  alpha=b^c  beta=a^c  gamma=a^b
+/   |a|  |b|   |c|               alpha  beta  gamma
+
+   1.0   1.1   1.2                90.   91.    92.
+
+/Number of atoms in the cell
+4
+
+/List of atoms
+0.1 0.2 0.3  / <-- Atom positions in units of the vectors a b c
+Al           / <-- name of this atom
+
+0.1 0.2 0.4  /....
+Al1
+
+0.2 0.2 0.3
+Fe
+
+0.1 0.3 0.3
+Fe
+
+/ ------------------------------------------------------------------
+
+
+  BUGS
+========
+
+ 1) Usually more than one choise exists to set up
+    crystallography cell which is consistent to given space group orientation.
+    So, output is not unique.
+
+ There are minor problems:
+
+ 2) In the program all floating comparisions are controlled 
+    by the parameter TOL.
+    So, program will not work correctly if input data reside near 
+    this threshold.
+
+ 3) Incorrect input can produce the "Segmentation fault" message.
+    
+
+  If you have suggestions or find a bug, please,
+  report to <yan@imag.kiev.ua>
+  
+   
+-------   
+   Bogdan Yanchitsky
+   Institute of Magnetism, Kiev, Ukraine
+   yan@imag.kiev.ua
+
