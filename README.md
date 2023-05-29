@@ -13,6 +13,6 @@ tar -zxvf ElaStic.tar.gz
 
 ## Configure environment variables
 ```bash
-export ElaSticROOT=/home/$USER/software/ElaStic_1.1
-export PATH=/home/$USER /software/ElaStic_1.1:$PATH
+export ElaSticROOT=/path_to_ElaStic
+export PATH=$ElaSticROOT:$PATH
 ```
